@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+	<package name="default" namespace="/" extends="struts-default">
+		
+		<!-- 定义新的拦截器栈，配置prepare 拦截器栈的alwaysInvokePrepare -->
+		<interceptors>
+			<interceptor-stack name="sshStack">
+				<interceptor-ref name="paramsPrepareParamsStack">
+					<param name="prepare.alwaysInvokePrepare">false</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- 使用新的拦截器栈 -->
+		<default-interceptor-ref name="sshStack"></default-interceptor-ref>
+		
+		<!-- 配置Action -->
+		<action name="*-user" class="userAction" method="{1}">
+			<result name="{1}-fail">/WEB-INF/pages/{1}-user-fail.jsp</result>
+			<result name="{1}-success">/WEB-INF/pages/{1}-user-success.jsp</result>
+		</action>
+	</package>
+
+</struts>

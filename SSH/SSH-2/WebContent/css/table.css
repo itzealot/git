@@ -1,0 +1,43 @@
+.table-class {
+	font-size: 18px;
+}
+
+.table-class tr {
+	margin-top: 3px;
+}
+
+.table-class th {
+	background-color: rgb(81, 78, 87);
+	color: white;
+	width: 150px;
+	height: 38px;
+	text-align: center;
+}
+
+.table-class input {
+	width: 200px;
+	font-size: 18px;
+	height: 38px;
+}
+
+.table-class td {
+	background-color: rgb(81, 78, 87);
+	color: white;
+	width: 150px;
+	height: 38px;
+	text-align: center;
+}
+
+.table-class select {
+	width: 200px;
+	font-size: 18px;
+	height: 38px;
+}
+
+#error-msg {
+	width: 350px;
+	height: 38px;
+	text-align: center;
+	color: red;
+	font-size: 18px;
+}

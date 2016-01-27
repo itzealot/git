@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+	<!-- 配置自动扫描的包 -->
+	<context:component-scan base-package="com.zt"></context:component-scan>
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+
+	<!-- 配置C3P0数据源 配置dataSource Bean 主库 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<!-- 使用外部化属性文件的属性 -->
+		<property name="user" value="${user}"></property>
+		<property name="password" value="${password}"></property>
+		<property name="driverClass" value="${driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbcUrl}"></property>
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}"></property>
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
+	</bean>
+
+	<!-- 配置Hibernate 的SessionFactory 实例： 通过Spring 提供LocalSessionFactoryBean 
+		进行配置 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 配置数据源属性，使用分布式数据库时，应该注入的是数据源路由器即dataSourceRouter -->
+		<property name="dataSource" ref="dataSource"></property>
+
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+
+		<!-- 配置Hibernate 映射文件的位置及名称，可以使用通配符。value值使用/隔开 -->
+		<property name="mappingLocations" value="classpath:/com/zt/entities/**/*.hbm.xml">
+		</property>
+	</bean>
+
+	<!-- 配置Spring 的声明式事务 -->
+	<!-- 1.配置Hibernate事务管理器，org.springframework.orm.hibernate4.HibernateTransactionManager 
+		依赖注入sessionFactory 对象。 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 配置事务异常封装 -->
+	<bean id="persistenceExceptionTranslationPostProcessor"
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!-- 2.配置事务属性，需要事务管理器。 声明式容器事务管理 ,transaction-manager指定事务管理器为 transactionManager 
+		。 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="load*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 日志记录仪 -->
+	<bean id="logger" class="com.zt.advice.Logger"></bean>
+
+	<!-- 3.配置事务切点，并把切点和事务属性关联起来 -->
+	<aop:config>
+		<!-- 事务切入点通知 -->
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* *..*Service.*(..))" />
+
+		<!-- 日志切面，logger切面,order属性设置优先级，值越小，优先级越高。若不配做，则会按配置的先后运行通知。 -->
+		<aop:aspect id="loggerAspect" ref="logger">
+			<!-- 配置环绕通知，pointcut进行切点表达式的配置，且不能是logService -->
+			<aop:around method="record"
+				pointcut="(execution(* *..*Service.save*(..))
+							or execution(* *..*Service.update*(..))
+							or execution(* *..*Service.delete*(..))
+							or execution(* *..*Service.batch*(..))
+							or execution(* *..*Service.new*(..))
+							or execution(* *..*Service.move*(..))
+							or execution(* *..*Service.grant*(..))
+							or execution(* *..*Service.clear*(..)))
+							and !bean(logService)
+							" />
+		</aop:aspect>
+
+	</aop:config>
+</beans>

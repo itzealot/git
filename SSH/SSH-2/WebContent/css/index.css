@@ -1,0 +1,58 @@
+body {
+	background-color: gray;
+	margin: 0 auto;
+	font-size: 23px;
+	color: black;
+}
+
+#manager-login {
+	width: 660px;
+	height: 300px;
+	margin-top: 200px;
+}
+
+#td-form-title {
+	padding-left: 123px;
+	font-size: 25px;
+	color: #00ffff;
+}
+
+#username-input {
+	width: 210px;
+	height: 30px;
+	font-size: 20px;
+}
+
+#password-input {
+	width: 210px;
+	height: 30px;
+	font-size: 20px;
+}
+
+#form-submit {
+	width: 120px;
+	height: 30px;
+	font-size: 20px;
+	background-color: silver;
+	font-size: 20px;
+	margin-left: 150px;
+}
+
+.td-error-font {
+	font-size: 18px;
+	color: red;
+}
+
+.td-label {
+	width: 100px;
+	text-align: right;
+}
+
+.td-error {
+	width: 260px;
+	height: 70px;
+}
+
+.errorMessage li {
+	list-style-type: none;
+}

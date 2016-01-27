@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- 配置Bean -->
+	<!-- 配置userAction Bean，依赖注入userService -->
+	<bean id="userAction" class="com.zt.ssi.action.UserAction">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<!-- 配置userService Bean，依赖注入userDao -->
+	<bean id="userService" class="com.zt.ssi.service.UserService">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	
+	<!-- 配置userDao Bean，依赖注入sqlSessionFactory与mapperInterface -->
+	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+		<!-- value值为package-name.class-name(全类名) -->
+		<property name="mapperInterface" value="com.zt.ssi.dao.UserDao"></property>
+	</bean>
+</beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+	<package name="default" namespace="/" extends="struts-default">
+		<!-- Spring整合Struts2时，在Struts2中配置的Spring 的Action的class属性，其值必须指向IOC容器bean的id属性值，personAction 是从IOC容器中获取 -->
+		<action name="person-save" class="personAction">
+			<result name="success">/success.jsp</result>
+		</action>
+	</package>
+
+</struts>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="person"
+		class="com.zt.beans.Person">
+		<property name="username" value="Zealot"></property>
+	</bean>
+	
+	<!-- 注意： 在IOC 容器中配置Struts2的Action 时，需要配置scope属性，其值必须为prototype。 -->
+	<bean id="personAction" 
+		class="com.zt.action.PersonAction" scope="prototype">
+		<!-- 依赖注入personService对象 -->
+		<property name="personService" ref="personService"></property>
+	</bean>
+		
+	<bean id="personService"
+		class="com.zt.service.PersonService"></bean>
+</beans>

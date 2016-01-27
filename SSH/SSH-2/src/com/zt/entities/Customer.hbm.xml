@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.zt.entities.Customer" table="CUSTOMERS">
+
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" />
+			<generator class="native" />
+		</id>
+
+		<property name="email" type="java.lang.String">
+			<column name="EMAIL" />
+		</property>
+
+		<property name="password" type="java.lang.String">
+			<column name="PASSWORD" />
+		</property>
+
+		<property name="name" type="java.lang.String">
+			<column name="NAME" />
+		</property>
+
+		<property name="nickname" type="java.lang.String">
+			<column name="NICK_NAME" />
+		</property>
+
+		<property name="remark" type="java.lang.String">
+			<column name="REMARK" />
+		</property>
+
+		<property name="keyword" type="java.lang.String">
+			<column name="KEYWORD" />
+		</property>
+		<!-- 多对多关联，引入中间表USER_ROLE_LINK -->
+		<set name="roles" table="CUSTOMER_ROLE_LINK" lazy="false">
+			<!-- 主键CUSTOMER_ID -->
+			<key column="CUSTOMER_ID" />
+
+			<!-- 多对多关联的另一个列名在Role中，命名为ROLE_ID -->
+			<many-to-many class="com.zt.entities.security.Role"
+				column="ROLE_ID"></many-to-many>
+		</set>
+	</class>
+</hibernate-mapping>

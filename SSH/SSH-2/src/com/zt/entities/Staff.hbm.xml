@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.zt.entities.Staff" table="STAFFS">
+
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" />
+			<generator class="native" />
+		</id>
+
+		<property name="name" type="java.lang.String">
+			<column name="NAME" />
+		</property>
+
+		<property name="username" type="java.lang.String">
+			<column name="USERNAME" />
+		</property>
+
+		<property name="password" type="java.lang.String">
+			<column name="PASSWORD" />
+		</property>
+
+		<!-- 一对多关联，在一的一方关联多的一方 -->
+		<many-to-one name="dept" class="com.zt.entities.Department"
+			fetch="join">
+			<column name="DEPT_ID" />
+		</many-to-one>
+
+		<property name="remark" type="java.lang.String">
+			<column name="REMARK" />
+		</property>
+
+		<property name="keyword" type="java.lang.String">
+			<column name="KEYWORD" />
+		</property>
+
+		<!-- 多对多关联，引入中间表STAFF_ROLE_LINK -->
+		<set name="roles" table="STAFF_ROLE_LINK" lazy="false">
+			<!-- 主键STAFF_ID -->
+			<key column="STAFF_ID" />
+
+			<!-- 多对多关联的另一个列名在Role中，命名为ROLE_ID -->
+			<many-to-many class="com.zt.entities.security.Role"
+				column="ROLE_ID"></many-to-many>
+		</set>
+
+		<property name="superAdmin" type="boolean">
+			<column name="SUPER_ADMIN" />
+		</property>
+
+	</class>
+</hibernate-mapping>

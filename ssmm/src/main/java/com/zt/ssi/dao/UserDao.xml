@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Dao的实现层，通过配置SQL语句对相应的表进行增删查改 -->
+<mapper namespace="com.zt.ssi.dao.UserDao">
+	<!-- INSERT SQL, insert User 相应的参数值以#{name}代替，其中name是model中的成员变量名。 -->
+	<insert id="addUser" parameterType="com.zt.ssi.model.User">
+		INSERT INTO User(name,
+		age)
+		VALUES(#{name}, #{age})
+	</insert>
+
+	<!-- SELECT SQL, SELECT FROM User -->
+	<select id="queryUserByName" resultType="com.zt.ssi.model.User"
+		parameterType="java.lang.String">
+		SELECT * FROM User WHERE name = #{name}
+	</select>
+
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+	<package name="default" namespace="/" extends="struts-default">
+		<!-- 定义新的拦截器栈，配置prepare 拦截器栈的alwaysInvokePrepare -->
+		<interceptors>
+
+			<!-- login interceptor -->
+			<interceptor name="loginInterceptor" class="com.zt.interceptors.LoginInterceptor" />
+
+			<!-- catch url interceptor -->
+			<interceptor name="catchUrlInterceptor"
+				class="com.zt.interceptors.CatchUrlInterceptor" />
+
+			<!-- right filter interceptor -->
+			<interceptor name="rightFilterInterceptor"
+				class="com.zt.interceptors.RightFilterInterceptor" />
+
+			<!-- 定义拦截器栈 -->
+			<interceptor-stack name="sshStack">
+
+				<!-- 注册拦截器 -->
+				<interceptor-ref name="loginInterceptor"></interceptor-ref>
+				<interceptor-ref name="catchUrlInterceptor"></interceptor-ref>
+				<interceptor-ref name="rightFilterInterceptor"></interceptor-ref>
+
+				<interceptor-ref name="paramsPrepareParamsStack">
+					<param name="prepare.alwaysInvokePrepare">false</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<!-- 使用新的拦截器栈即定义默认的拦截器栈 -->
+		<default-interceptor-ref name="sshStack" />
+
+		<!-- 定义全局结果 -->
+		<global-results>
+			<result name="login">/index.jsp</result>
+			<result name="error_no_right">/index.jsp</result>
+
+			<result name="login-success">/WEB-INF/staff-pages/staff-info.jsp</result>
+			<result name="myInfoPage">/WEB-INF/staff-pages/staff-info.jsp</result>
+		</global-results>
+
+		<!-- 权限RightAction -->
+		<action name="RightAction_*" class="rightAction" method="{1}">
+			<!-- 跳转页面需要加WEB-INF -->
+			<result name="listPage">/WEB-INF/right-pages/right-list.jsp</result>
+			<result name="editRightPage">/WEB-INF/right-pages/right-edit.jsp</result>
+			<result name="deleteRightPage">/WEB-INF/right-pages/right-delete.jsp</result>
+
+			<!-- 重定向，即添加完权限后重定向到查询所有权限的Action中，重新进行查询 -->
+			<result name="findAllRightAction" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">RightAction_pageModels</param>
+			</result>
+		</action>
+
+		<!-- LogAction -->
+		<action name="LogAction_*" class="logAction" method="{1}">
+			<result name="logListPage">/WEB-INF/log-pages/log-list.jsp</result>
+
+			<!-- 重定向，即添加完后重定向，重新进行查询 -->
+			<result name="findLogListsAction" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">LogAction_findAllLogs</param>
+			</result>
+		</action>
+
+		<!-- LoginAction -->
+		<action name="LoginAction_*" class="loginAction" method="{1}">
+		</action>
+
+		<!-- LogoutAction -->
+		<action name="LogoutAction_*" class="logoutAction" method="{1}">
+		</action>
+
+		<!-- RoleAction -->
+		<action name="RoleAction_*" class="roleAction" method="{1}">
+			<result name="editRolePage">/WEB-INF/role-pages/role-edit.jsp</result>
+			<result name="addRolePage">/WEB-INF/role-pages/role-add.jsp</result>
+			<result name="listPage">/WEB-INF/role-pages/role-list.jsp</result>
+			<result name="findRoleAllRights">/WEB-INF/role-pages/role-add-rights.jsp</result>
+
+			<!-- 重定向，即添加完权限后重定向到查询所有角色的Action中，重新进行查询 -->
+			<result name="findAllRolesAction" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">RoleAction_pageModels</param>
+			</result>
+		</action>
+
+		<!-- 部门Action，DepartmentAction -->
+		<action name="DepartmentAction_*" class="departmentAction"
+			method="{1}">
+			<result name="listPage">/WEB-INF/dept-pages/dept-list.jsp</result>
+			<result name="addDeptPage">/WEB-INF/dept-pages/dept-add.jsp</result>
+			<result name="editDeptPage">/WEB-INF/dept-pages/dept-edit.jsp</result>
+
+			<!-- 重定向，即添加完后重定向，重新进行查询 -->
+			<result name="findAllDeptsAction" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">DepartmentAction_pageModels</param>
+			</result>
+		</action>
+
+		<!-- StaffAction -->
+		<action name="StaffAction_*" class="staffAction" method="{1}">
+			<result name="listPage">/WEB-INF/staff-pages/staff-list.jsp</result>
+			<result name="addStaffPage">/WEB-INF/staff-pages/staff-add.jsp</result>
+			<result name="editStaffPage">/WEB-INF/staff-pages/staff-edit.jsp</result>
+			<result name="findStaffAllRoles">/WEB-INF/staff-pages/staff-add-roles.jsp</result>
+			<result name="changePassPage">/WEB-INF/staff-pages/staff-changepass.jsp
+			</result>
+
+			<!-- 重定向，即添加完后重定向，重新进行查询 -->
+			<result name="findAllStaffsAction" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">StaffAction_pageModels</param>
+			</result>
+		</action>
+	</package>
+
+</struts>

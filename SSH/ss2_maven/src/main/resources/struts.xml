@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<!-- 开发Mode -->
+	<constant name="struts.devMode" value="true" />
+	
+	<package name="default" namespace="/" extends="struts-default">
+
+		<interceptors>
+			<interceptor-stack name="sshStack">
+				<interceptor-ref name="paramsPrepareParamsStack">
+					<param name="prepare.alwaysInvokePrepare">false</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="sshStack"></default-interceptor-ref>
+
+		<default-action-ref name="http-404"></default-action-ref>
+		
+		<!-- 应该配置在索引action的最前面 -->
+		<global-results>
+			<result name="error">/WEB-INF/error-pages/error.jsp</result>
+		</global-results>
+
+		<!-- 默认action -->
+		<action name="http-404" class="com.zt.actions.DefaultAction">
+			<result>/WEB-INF/http/404.jsp</result>
+		</action>
+		
+		<!-- home is index.jsp -->
+		<action name="home" class="entryAction" method="home">
+			<result name="home">index.jsp</result>
+		</action>
+
+		<action name="UserAction_*" class="userAction" method="{1}">
+		</action>
+
+	</package>
+</struts>
